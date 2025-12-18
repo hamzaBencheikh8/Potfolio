@@ -8,9 +8,13 @@ const Projects = () => {
 
     useEffect(() => {
         // Fetch projects from backend
-        const apiUrl = import.meta.env.PROD
+        // Check if we are in production based on hostname (vercel.app)
+        const isProduction = window.location.hostname.includes('vercel.app');
+        const apiUrl = isProduction
             ? 'https://portfolio-backend-babn.onrender.com/api/projects'
             : 'http://localhost:5000/api/projects';
+
+        console.log('Fetching projects from:', apiUrl); // Debug log
 
         axios.get(apiUrl)
             .then(response => {
