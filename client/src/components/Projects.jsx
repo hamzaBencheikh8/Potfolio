@@ -14,7 +14,7 @@ const Projects = () => {
             ? 'https://portfolio-backend-babn.onrender.com/api/projects'
             : 'http://localhost:5000/api/projects';
 
-        console.log('Fetching projects from:', apiUrl); // Debug log
+        
 
         axios.get(apiUrl)
             .then(response => {
