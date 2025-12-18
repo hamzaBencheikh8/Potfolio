@@ -8,7 +8,11 @@ const Projects = () => {
 
     useEffect(() => {
         // Fetch projects from backend
-        axios.get('http://localhost:5000/api/projects')
+        const apiUrl = import.meta.env.PROD
+            ? 'https://portfolio-backend-babn.onrender.com/api/projects'
+            : 'http://localhost:5000/api/projects';
+
+        axios.get(apiUrl)
             .then(response => {
                 setProjects(response.data);
             })
