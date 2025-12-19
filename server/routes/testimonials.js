@@ -5,6 +5,18 @@ import pool from '../config/database.js';
 
 const router = express.Router();
 
+// Helper function to convert snake_case to camelCase
+function toCamelCase(obj) {
+    if (!obj) return obj;
+
+    const newObj = {};
+    for (const key in obj) {
+        const camelKey = key.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
+        newObj[camelKey] = obj[key];
+    }
+    return newObj;
+}
+
 // Rate limiting: 10 testimonials per 15 minutes
 const testimonialLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -39,7 +51,8 @@ router.get('/', async (req, res) => {
         const result = await pool.query(
             'SELECT * FROM testimonials WHERE approved = true ORDER BY created_at DESC'
         );
-        res.json(result.rows);
+        const testimonials = result.rows.map(toCamelCase);
+        res.json(testimonials);
     } catch (error) {
         console.error('Get testimonials error:', error);
         res.status(500).json({ error: 'Failed to retrieve testimonials' });
@@ -66,7 +79,7 @@ router.post('/', testimonialLimiter, validateTestimonial, async (req, res) => {
         res.status(201).json({
             success: true,
             message: 'Testimonial submitted successfully! It will appear after approval.',
-            testimonial: result.rows[0]
+            testimonial: toCamelCase(result.rows[0])
         });
     } catch (error) {
         console.error('Create testimonial error:', error);

@@ -4,6 +4,18 @@ import pool from '../config/database.js';
 
 const router = express.Router();
 
+// Helper function to convert snake_case to camelCase
+function toCamelCase(obj) {
+    if (!obj) return obj;
+
+    const newObj = {};
+    for (const key in obj) {
+        const camelKey = key.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
+        newObj[camelKey] = obj[key];
+    }
+    return newObj;
+}
+
 // ============ PROJECTS ============
 
 // Get all projects
@@ -12,7 +24,8 @@ router.get('/projects', authMiddleware, async (req, res) => {
         const result = await pool.query(
             'SELECT * FROM projects ORDER BY created_at DESC'
         );
-        res.json(result.rows);
+        const projects = result.rows.map(toCamelCase);
+        res.json(projects);
     } catch (error) {
         console.error('Get projects error:', error);
         res.status(500).json({ error: 'Failed to retrieve projects' });
@@ -29,7 +42,7 @@ router.post('/projects', authMiddleware, async (req, res) => {
             [title, description, technologies, liveUrl || null, githubUrl || null, image || null]
         );
 
-        res.status(201).json({ success: true, project: result.rows[0] });
+        res.status(201).json({ success: true, project: toCamelCase(result.rows[0]) });
     } catch (error) {
         console.error('Create project error:', error);
         res.status(500).json({ error: 'Failed to create project' });
@@ -51,7 +64,7 @@ router.put('/projects/:id', authMiddleware, async (req, res) => {
             return res.status(404).json({ error: 'Project not found' });
         }
 
-        res.json({ success: true, project: result.rows[0] });
+        res.json({ success: true, project: toCamelCase(result.rows[0]) });
     } catch (error) {
         console.error('Update project error:', error);
         res.status(500).json({ error: 'Failed to update project' });
@@ -87,7 +100,8 @@ router.get('/certifications', authMiddleware, async (req, res) => {
         const result = await pool.query(
             'SELECT * FROM certifications ORDER BY created_at DESC'
         );
-        res.json(result.rows);
+        const certifications = result.rows.map(toCamelCase);
+        res.json(certifications);
     } catch (error) {
         console.error('Get certifications error:', error);
         res.status(500).json({ error: 'Failed to retrieve certifications' });
@@ -104,7 +118,7 @@ router.post('/certifications', authMiddleware, async (req, res) => {
             [title, issuer, date, credentialUrl || null, badge || null]
         );
 
-        res.status(201).json({ success: true, certification: result.rows[0] });
+        res.status(201).json({ success: true, certification: toCamelCase(result.rows[0]) });
     } catch (error) {
         console.error('Create certification error:', error);
         res.status(500).json({ error: 'Failed to create certification' });
@@ -126,7 +140,7 @@ router.put('/certifications/:id', authMiddleware, async (req, res) => {
             return res.status(404).json({ error: 'Certification not found' });
         }
 
-        res.json({ success: true, certification: result.rows[0] });
+        res.json({ success: true, certification: toCamelCase(result.rows[0]) });
     } catch (error) {
         console.error('Update certification error:', error);
         res.status(500).json({ error: 'Failed to update certification' });
@@ -162,7 +176,8 @@ router.get('/testimonials', authMiddleware, async (req, res) => {
         const result = await pool.query(
             'SELECT * FROM testimonials ORDER BY created_at DESC'
         );
-        res.json(result.rows);
+        const testimonials = result.rows.map(toCamelCase);
+        res.json(testimonials);
     } catch (error) {
         console.error('Get testimonials error:', error);
         res.status(500).json({ error: 'Failed to retrieve testimonials' });
@@ -183,7 +198,7 @@ router.put('/testimonials/:id/approve', authMiddleware, async (req, res) => {
             return res.status(404).json({ error: 'Testimonial not found' });
         }
 
-        res.json({ success: true, testimonial: result.rows[0] });
+        res.json({ success: true, testimonial: toCamelCase(result.rows[0]) });
     } catch (error) {
         console.error('Approve testimonial error:', error);
         res.status(500).json({ error: 'Failed to approve testimonial' });
