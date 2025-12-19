@@ -8,7 +8,7 @@ const Testimonials = () => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
-    const [visibleCount, setVisibleCount] = useState(6); // Show 6 testimonials initially
+    const [visibleCount, setVisibleCount] = useState(4); // Show 4 testimonials initially
 
     // API URL (production vs development)
     const apiUrl = import.meta.env.PROD
@@ -230,7 +230,7 @@ const Testimonials = () => {
                                         animate={{ opacity: 1, y: 0 }}
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        onClick={() => setVisibleCount(prev => prev + 6)}
+                                        onClick={() => setVisibleCount(prev => prev + 4)}
                                         className="w-full glass px-6 py-3 rounded-xl text-cyber-green border border-cyber-green/30 hover:bg-cyber-green/10 transition-all duration-300 font-semibold"
                                     >
                                         Load More ({testimonials.length - visibleCount} remaining)
@@ -238,7 +238,7 @@ const Testimonials = () => {
                                 )}
 
                                 {/* All Loaded Message */}
-                                {visibleCount >= testimonials.length && testimonials.length > 6 && (
+                                {visibleCount >= testimonials.length && testimonials.length > 4 && (
                                     <p className="text-center text-gray-500 text-sm py-4">
                                         All testimonials loaded ✓
                                     </p>
