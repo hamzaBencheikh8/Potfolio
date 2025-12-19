@@ -6,6 +6,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import contactRoutes from './routes/contact.js';
 import projectRoutes from './routes/projects.js';
+import testimonialsRoutes from './routes/testimonials.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Routes
 app.use('/api/contact', contactRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/testimonials', testimonialsRoutes);
 
 // Health check endpoint
 app.get('/', (req, res) => {

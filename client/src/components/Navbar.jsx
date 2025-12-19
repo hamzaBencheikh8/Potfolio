@@ -36,7 +36,7 @@ const Navbar = () => {
         setMobileMenuOpen(false);
     };
 
-    const menuItems = ['home', 'about', 'skills', 'certifications', 'projects', 'education', 'contact'];
+    const menuItems = ['home', 'about', 'skills', 'certifications', 'projects', 'education', 'testimonials', 'contact'];
 
     return (
         <motion.nav
