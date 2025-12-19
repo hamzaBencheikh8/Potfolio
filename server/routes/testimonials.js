@@ -1,16 +1,9 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
 import rateLimit from 'express-rate-limit';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import pool from '../config/database.js';
 
 const router = express.Router();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Path to testimonials JSON file
-const TESTIMONIALS_FILE = path.join(__dirname, '../data/testimonials.json');
 
 // Rate limiting: 10 testimonials per 15 minutes
 const testimonialLimiter = rateLimit({
@@ -40,28 +33,15 @@ const validateTestimonial = [
         .withMessage('Message must be between 10 and 500 characters')
 ];
 
-// Ensure testimonials file exists
-async function ensureTestimonialsFile() {
-    try {
-        await fs.access(TESTIMONIALS_FILE);
-    } catch {
-        // Create data directory if it doesn't exist
-        const dataDir = path.dirname(TESTIMONIALS_FILE);
-        await fs.mkdir(dataDir, { recursive: true });
-        // Create empty testimonials file
-        await fs.writeFile(TESTIMONIALS_FILE, JSON.stringify([], null, 2));
-    }
-}
-
-// GET all testimonials
+// GET all approved testimonials (for public display)
 router.get('/', async (req, res) => {
     try {
-        await ensureTestimonialsFile();
-        const data = await fs.readFile(TESTIMONIALS_FILE, 'utf-8');
-        const testimonials = JSON.parse(data);
-        res.json(testimonials);
+        const result = await pool.query(
+            'SELECT * FROM testimonials WHERE approved = true ORDER BY created_at DESC'
+        );
+        res.json(result.rows);
     } catch (error) {
-        console.error('Error reading testimonials:', error);
+        console.error('Get testimonials error:', error);
         res.status(500).json({ error: 'Failed to retrieve testimonials' });
     }
 });
@@ -75,43 +55,21 @@ router.post('/', testimonialLimiter, validateTestimonial, async (req, res) => {
     }
 
     try {
-        await ensureTestimonialsFile();
-
         const { name, position, message } = req.body;
 
-        // Read existing testimonials
-        const data = await fs.readFile(TESTIMONIALS_FILE, 'utf-8');
-        const testimonials = JSON.parse(data);
-
-        // Create new testimonial
-        const newTestimonial = {
-            id: Date.now(),
-            name: name.trim(),
-            position: position?.trim() || '',
-            message: message.trim(),
-            date: new Date().toISOString(),
-            approved: true // Auto-approve for now
-        };
-
-        // Add to beginning of array (newest first)
-        testimonials.unshift(newTestimonial);
-
-        // Keep only last 50 testimonials
-        const limitedTestimonials = testimonials.slice(0, 50);
-
-        // Save to file
-        await fs.writeFile(
-            TESTIMONIALS_FILE,
-            JSON.stringify(limitedTestimonials, null, 2)
+        // Create new testimonial (defaults to approved=false, will need admin approval)
+        const result = await pool.query(
+            'INSERT INTO testimonials (name, position, message, approved) VALUES ($1, $2, $3, $4) RETURNING *',
+            [name.trim(), position?.trim() || null, message.trim(), false]
         );
 
         res.status(201).json({
             success: true,
-            message: 'Testimonial submitted successfully!',
-            testimonial: newTestimonial
+            message: 'Testimonial submitted successfully! It will appear after approval.',
+            testimonial: result.rows[0]
         });
     } catch (error) {
-        console.error('Error saving testimonial:', error);
+        console.error('Create testimonial error:', error);
         res.status(500).json({ error: 'Failed to save testimonial' });
     }
 });

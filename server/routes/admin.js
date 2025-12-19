@@ -1,37 +1,20 @@
 import express from 'express';
 import authMiddleware from '../middleware/auth.js';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import pool from '../config/database.js';
 
 const router = express.Router();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const PROJECTS_FILE = path.join(__dirname, '../data/projects.json');
-const CERTIFICATIONS_FILE = path.join(__dirname, '../data/certifications.json');
-const TESTIMONIALS_FILE = path.join(__dirname, '../data/testimonials.json');
-
-// Ensure data files exist
-async function ensureFile(filePath, defaultData = []) {
-    try {
-        await fs.access(filePath);
-    } catch {
-        const dataDir = path.dirname(filePath);
-        await fs.mkdir(dataDir, { recursive: true });
-        await fs.writeFile(filePath, JSON.stringify(defaultData, null, 2));
-    }
-}
 
 // ============ PROJECTS ============
 
 // Get all projects
 router.get('/projects', authMiddleware, async (req, res) => {
     try {
-        await ensureFile(PROJECTS_FILE);
-        const data = await fs.readFile(PROJECTS_FILE, 'utf-8');
-        res.json(JSON.parse(data));
+        const result = await pool.query(
+            'SELECT * FROM projects ORDER BY created_at DESC'
+        );
+        res.json(result.rows);
     } catch (error) {
+        console.error('Get projects error:', error);
         res.status(500).json({ error: 'Failed to retrieve projects' });
     }
 });
@@ -39,21 +22,16 @@ router.get('/projects', authMiddleware, async (req, res) => {
 // Create project
 router.post('/projects', authMiddleware, async (req, res) => {
     try {
-        await ensureFile(PROJECTS_FILE);
-        const data = await fs.readFile(PROJECTS_FILE, 'utf-8');
-        const projects = JSON.parse(data);
+        const { title, description, technologies, liveUrl, githubUrl, image } = req.body;
 
-        const newProject = {
-            id: Date.now(),
-            ...req.body,
-            createdAt: new Date().toISOString()
-        };
+        const result = await pool.query(
+            'INSERT INTO projects (title, description, technologies, live_url, github_url, image) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [title, description, technologies, liveUrl || null, githubUrl || null, image || null]
+        );
 
-        projects.push(newProject);
-        await fs.writeFile(PROJECTS_FILE, JSON.stringify(projects, null, 2));
-
-        res.status(201).json({ success: true, project: newProject });
+        res.status(201).json({ success: true, project: result.rows[0] });
     } catch (error) {
+        console.error('Create project error:', error);
         res.status(500).json({ error: 'Failed to create project' });
     }
 });
@@ -61,20 +39,21 @@ router.post('/projects', authMiddleware, async (req, res) => {
 // Update project
 router.put('/projects/:id', authMiddleware, async (req, res) => {
     try {
-        await ensureFile(PROJECTS_FILE);
-        const data = await fs.readFile(PROJECTS_FILE, 'utf-8');
-        const projects = JSON.parse(data);
+        const { id } = req.params;
+        const { title, description, technologies, liveUrl, githubUrl, image } = req.body;
 
-        const index = projects.findIndex(p => p.id == req.params.id);
-        if (index === -1) {
+        const result = await pool.query(
+            'UPDATE projects SET title = $1, description = $2, technologies = $3, live_url = $4, github_url = $5, image = $6 WHERE id = $7 RETURNING *',
+            [title, description, technologies, liveUrl || null, githubUrl || null, image || null, id]
+        );
+
+        if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Project not found' });
         }
 
-        projects[index] = { ...projects[index], ...req.body, updatedAt: new Date().toISOString() };
-        await fs.writeFile(PROJECTS_FILE, JSON.stringify(projects, null, 2));
-
-        res.json({ success: true, project: projects[index] });
+        res.json({ success: true, project: result.rows[0] });
     } catch (error) {
+        console.error('Update project error:', error);
         res.status(500).json({ error: 'Failed to update project' });
     }
 });
@@ -82,20 +61,20 @@ router.put('/projects/:id', authMiddleware, async (req, res) => {
 // Delete project
 router.delete('/projects/:id', authMiddleware, async (req, res) => {
     try {
-        await ensureFile(PROJECTS_FILE);
-        const data = await fs.readFile(PROJECTS_FILE, 'utf-8');
-        let projects = JSON.parse(data);
+        const { id } = req.params;
 
-        const index = projects.findIndex(p => p.id == req.params.id);
-        if (index === -1) {
+        const result = await pool.query(
+            'DELETE FROM projects WHERE id = $1 RETURNING id',
+            [id]
+        );
+
+        if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Project not found' });
         }
 
-        projects = projects.filter(p => p.id != req.params.id);
-        await fs.writeFile(PROJECTS_FILE, JSON.stringify(projects, null, 2));
-
         res.json({ success: true, message: 'Project deleted' });
     } catch (error) {
+        console.error('Delete project error:', error);
         res.status(500).json({ error: 'Failed to delete project' });
     }
 });
@@ -105,10 +84,12 @@ router.delete('/projects/:id', authMiddleware, async (req, res) => {
 // Get all certifications
 router.get('/certifications', authMiddleware, async (req, res) => {
     try {
-        await ensureFile(CERTIFICATIONS_FILE);
-        const data = await fs.readFile(CERTIFICATIONS_FILE, 'utf-8');
-        res.json(JSON.parse(data));
+        const result = await pool.query(
+            'SELECT * FROM certifications ORDER BY created_at DESC'
+        );
+        res.json(result.rows);
     } catch (error) {
+        console.error('Get certifications error:', error);
         res.status(500).json({ error: 'Failed to retrieve certifications' });
     }
 });
@@ -116,21 +97,16 @@ router.get('/certifications', authMiddleware, async (req, res) => {
 // Create certification
 router.post('/certifications', authMiddleware, async (req, res) => {
     try {
-        await ensureFile(CERTIFICATIONS_FILE);
-        const data = await fs.readFile(CERTIFICATIONS_FILE, 'utf-8');
-        const certifications = JSON.parse(data);
+        const { title, issuer, date, credentialUrl, badge } = req.body;
 
-        const newCert = {
-            id: Date.now(),
-            ...req.body,
-            createdAt: new Date().toISOString()
-        };
+        const result = await pool.query(
+            'INSERT INTO certifications (title, issuer, date, credential_url, badge) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [title, issuer, date, credentialUrl || null, badge || null]
+        );
 
-        certifications.push(newCert);
-        await fs.writeFile(CERTIFICATIONS_FILE, JSON.stringify(certifications, null, 2));
-
-        res.status(201).json({ success: true, certification: newCert });
+        res.status(201).json({ success: true, certification: result.rows[0] });
     } catch (error) {
+        console.error('Create certification error:', error);
         res.status(500).json({ error: 'Failed to create certification' });
     }
 });
@@ -138,20 +114,21 @@ router.post('/certifications', authMiddleware, async (req, res) => {
 // Update certification
 router.put('/certifications/:id', authMiddleware, async (req, res) => {
     try {
-        await ensureFile(CERTIFICATIONS_FILE);
-        const data = await fs.readFile(CERTIFICATIONS_FILE, 'utf-8');
-        const certifications = JSON.parse(data);
+        const { id } = req.params;
+        const { title, issuer, date, credentialUrl, badge } = req.body;
 
-        const index = certifications.findIndex(c => c.id == req.params.id);
-        if (index === -1) {
+        const result = await pool.query(
+            'UPDATE certifications SET title = $1, issuer = $2, date = $3, credential_url = $4, badge = $5 WHERE id = $6 RETURNING *',
+            [title, issuer, date, credentialUrl || null, badge || null, id]
+        );
+
+        if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Certification not found' });
         }
 
-        certifications[index] = { ...certifications[index], ...req.body, updatedAt: new Date().toISOString() };
-        await fs.writeFile(CERTIFICATIONS_FILE, JSON.stringify(certifications, null, 2));
-
-        res.json({ success: true, certification: certifications[index] });
+        res.json({ success: true, certification: result.rows[0] });
     } catch (error) {
+        console.error('Update certification error:', error);
         res.status(500).json({ error: 'Failed to update certification' });
     }
 });
@@ -159,20 +136,20 @@ router.put('/certifications/:id', authMiddleware, async (req, res) => {
 // Delete certification
 router.delete('/certifications/:id', authMiddleware, async (req, res) => {
     try {
-        await ensureFile(CERTIFICATIONS_FILE);
-        const data = await fs.readFile(CERTIFICATIONS_FILE, 'utf-8');
-        let certifications = JSON.parse(data);
+        const { id } = req.params;
 
-        const index = certifications.findIndex(c => c.id == req.params.id);
-        if (index === -1) {
+        const result = await pool.query(
+            'DELETE FROM certifications WHERE id = $1 RETURNING id',
+            [id]
+        );
+
+        if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Certification not found' });
         }
 
-        certifications = certifications.filter(c => c.id != req.params.id);
-        await fs.writeFile(CERTIFICATIONS_FILE, JSON.stringify(certifications, null, 2));
-
         res.json({ success: true, message: 'Certification deleted' });
     } catch (error) {
+        console.error('Delete certification error:', error);
         res.status(500).json({ error: 'Failed to delete certification' });
     }
 });
@@ -182,10 +159,12 @@ router.delete('/certifications/:id', authMiddleware, async (req, res) => {
 // Get all testimonials (admin view)
 router.get('/testimonials', authMiddleware, async (req, res) => {
     try {
-        await ensureFile(TESTIMONIALS_FILE);
-        const data = await fs.readFile(TESTIMONIALS_FILE, 'utf-8');
-        res.json(JSON.parse(data));
+        const result = await pool.query(
+            'SELECT * FROM testimonials ORDER BY created_at DESC'
+        );
+        res.json(result.rows);
     } catch (error) {
+        console.error('Get testimonials error:', error);
         res.status(500).json({ error: 'Failed to retrieve testimonials' });
     }
 });
@@ -193,20 +172,20 @@ router.get('/testimonials', authMiddleware, async (req, res) => {
 // Approve testimonial
 router.put('/testimonials/:id/approve', authMiddleware, async (req, res) => {
     try {
-        await ensureFile(TESTIMONIALS_FILE);
-        const data = await fs.readFile(TESTIMONIALS_FILE, 'utf-8');
-        const testimonials = JSON.parse(data);
+        const { id } = req.params;
 
-        const index = testimonials.findIndex(t => t.id == req.params.id);
-        if (index === -1) {
+        const result = await pool.query(
+            'UPDATE testimonials SET approved = true WHERE id = $1 RETURNING *',
+            [id]
+        );
+
+        if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Testimonial not found' });
         }
 
-        testimonials[index].approved = true;
-        await fs.writeFile(TESTIMONIALS_FILE, JSON.stringify(testimonials, null, 2));
-
-        res.json({ success: true, testimonial: testimonials[index] });
+        res.json({ success: true, testimonial: result.rows[0] });
     } catch (error) {
+        console.error('Approve testimonial error:', error);
         res.status(500).json({ error: 'Failed to approve testimonial' });
     }
 });
@@ -214,20 +193,20 @@ router.put('/testimonials/:id/approve', authMiddleware, async (req, res) => {
 // Delete testimonial
 router.delete('/testimonials/:id', authMiddleware, async (req, res) => {
     try {
-        await ensureFile(TESTIMONIALS_FILE);
-        const data = await fs.readFile(TESTIMONIALS_FILE, 'utf-8');
-        let testimonials = JSON.parse(data);
+        const { id } = req.params;
 
-        const index = testimonials.findIndex(t => t.id == req.params.id);
-        if (index === -1) {
+        const result = await pool.query(
+            'DELETE FROM testimonials WHERE id = $1 RETURNING id',
+            [id]
+        );
+
+        if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Testimonial not found' });
         }
 
-        testimonials = testimonials.filter(t => t.id != req.params.id);
-        await fs.writeFile(TESTIMONIALS_FILE, JSON.stringify(testimonials, null, 2));
-
         res.json({ success: true, message: 'Testimonial deleted' });
     } catch (error) {
+        console.error('Delete testimonial error:', error);
         res.status(500).json({ error: 'Failed to delete testimonial' });
     }
 });
@@ -237,28 +216,23 @@ router.delete('/testimonials/:id', authMiddleware, async (req, res) => {
 // Get dashboard statistics
 router.get('/stats', authMiddleware, async (req, res) => {
     try {
-        await ensureFile(PROJECTS_FILE);
-        await ensureFile(CERTIFICATIONS_FILE);
-        await ensureFile(TESTIMONIALS_FILE);
-
-        const projectsData = await fs.readFile(PROJECTS_FILE, 'utf-8');
-        const certificationsData = await fs.readFile(CERTIFICATIONS_FILE, 'utf-8');
-        const testimonialsData = await fs.readFile(TESTIMONIALS_FILE, 'utf-8');
-
-        const projects = JSON.parse(projectsData);
-        const certifications = JSON.parse(certificationsData);
-        const testimonials = JSON.parse(testimonialsData);
+        const projectsCount = await pool.query('SELECT COUNT(*) FROM projects');
+        const certificationsCount = await pool.query('SELECT COUNT(*) FROM certifications');
+        const testimonialsCount = await pool.query('SELECT COUNT(*) FROM testimonials');
+        const pendingCount = await pool.query('SELECT COUNT(*) FROM testimonials WHERE approved = false');
+        const approvedCount = await pool.query('SELECT COUNT(*) FROM testimonials WHERE approved = true');
 
         const stats = {
-            totalProjects: projects.length,
-            totalCertifications: certifications.length,
-            totalTestimonials: testimonials.length,
-            pendingTestimonials: testimonials.filter(t => !t.approved).length,
-            approvedTestimonials: testimonials.filter(t => t.approved).length
+            totalProjects: parseInt(projectsCount.rows[0].count),
+            totalCertifications: parseInt(certificationsCount.rows[0].count),
+            totalTestimonials: parseInt(testimonialsCount.rows[0].count),
+            pendingTestimonials: parseInt(pendingCount.rows[0].count),
+            approvedTestimonials: parseInt(approvedCount.rows[0].count)
         };
 
         res.json(stats);
     } catch (error) {
+        console.error('Get stats error:', error);
         res.status(500).json({ error: 'Failed to retrieve statistics' });
     }
 });

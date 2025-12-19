@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import initializeDatabase from './config/initDB.js';
 import contactRoutes from './routes/contact.js';
 import projectRoutes from './routes/projects.js';
 import testimonialsRoutes from './routes/testimonials.js';
@@ -54,7 +55,20 @@ app.get('/', (req, res) => {
     res.json({ message: 'Portfolio API is running!' });
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Initialize database and start server
+async function startServer() {
+    try {
+        // Initialize database tables
+        await initializeDatabase();
+
+        // Start server
+        app.listen(PORT, () => {
+            console.log(`Server is running on http://localhost:${PORT}`);
+        });
+    } catch (error) {
+        console.error('Failed to start server:', error);
+        process.exit(1);
+    }
+}
+
+startServer();
