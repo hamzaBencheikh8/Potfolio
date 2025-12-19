@@ -16,6 +16,9 @@ const Navbar = () => {
     // Block body scroll when mobile menu is open
     useEffect(() => {
         if (mobileMenuOpen) {
+            // Scroll to top first
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            // Then block scroll
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
