@@ -8,6 +8,7 @@ const Testimonials = () => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
+    const [visibleCount, setVisibleCount] = useState(6); // Show 6 testimonials initially
 
     // API URL (production vs development)
     const apiUrl = import.meta.env.PROD
@@ -178,7 +179,7 @@ const Testimonials = () => {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
-                        className="space-y-4 max-h-[600px] overflow-y-auto pr-4 custom-scrollbar"
+                        className="space-y-4"
                     >
                         {testimonials.length === 0 ? (
                             <div className="glass p-8 rounded-xl border border-gray-700/50 text-center">
@@ -187,39 +188,62 @@ const Testimonials = () => {
                                 </p>
                             </div>
                         ) : (
-                            testimonials.map((testimonial, index) => (
-                                <motion.div
-                                    key={testimonial.id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="glass p-6 rounded-xl border border-gray-700/50 hover:border-cyber-green/30 transition-colors"
-                                >
-                                    <div className="flex items-start gap-4">
-                                        {/* Avatar */}
-                                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyber-green to-cyber-blue flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
-                                            {testimonial.name.charAt(0).toUpperCase()}
-                                        </div>
+                            <>
+                                {testimonials.slice(0, visibleCount).map((testimonial, index) => (
+                                    <motion.div
+                                        key={testimonial.id}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: index * 0.1 }}
+                                        className="glass p-6 rounded-xl border border-gray-700/50 hover:border-cyber-green/30 transition-colors"
+                                    >
+                                        <div className="flex items-start gap-4">
+                                            {/* Avatar */}
+                                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyber-green to-cyber-blue flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
+                                                {testimonial.name.charAt(0).toUpperCase()}
+                                            </div>
 
-                                        <div className="flex-1">
-                                            <h4 className="font-bold text-white">
-                                                {testimonial.name}
-                                            </h4>
-                                            {testimonial.position && (
-                                                <p className="text-xs text-gray-400 mb-2">
-                                                    {testimonial.position}
+                                            <div className="flex-1">
+                                                <h4 className="font-bold text-white">
+                                                    {testimonial.name}
+                                                </h4>
+                                                {testimonial.position && (
+                                                    <p className="text-xs text-gray-400 mb-2">
+                                                        {testimonial.position}
+                                                    </p>
+                                                )}
+                                                <p className="text-gray-300 text-sm leading-relaxed">
+                                                    "{testimonial.message}"
                                                 </p>
-                                            )}
-                                            <p className="text-gray-300 text-sm leading-relaxed">
-                                                "{testimonial.message}"
-                                            </p>
-                                            <p className="text-xs text-gray-500 mt-2">
-                                                {new Date(testimonial.date).toLocaleDateString()}
-                                            </p>
+                                                <p className="text-xs text-gray-500 mt-2">
+                                                    {new Date(testimonial.date).toLocaleDateString()}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </motion.div>
-                            ))
+                                    </motion.div>
+                                ))}
+
+                                {/* Load More Button */}
+                                {visibleCount < testimonials.length && (
+                                    <motion.button
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={() => setVisibleCount(prev => prev + 6)}
+                                        className="w-full glass px-6 py-3 rounded-xl text-cyber-green border border-cyber-green/30 hover:bg-cyber-green/10 transition-all duration-300 font-semibold"
+                                    >
+                                        Load More ({testimonials.length - visibleCount} remaining)
+                                    </motion.button>
+                                )}
+
+                                {/* All Loaded Message */}
+                                {visibleCount >= testimonials.length && testimonials.length > 6 && (
+                                    <p className="text-center text-gray-500 text-sm py-4">
+                                        All testimonials loaded ✓
+                                    </p>
+                                )}
+                            </>
                         )}
                     </motion.div>
                 </div>
