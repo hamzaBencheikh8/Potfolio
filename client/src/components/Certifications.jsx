@@ -5,56 +5,42 @@ const Certifications = () => {
     const certifications = [
         {
             id: 1,
-            name: "Machine Learning Specialization",
-            organization: "Coursera (Stanford University)",
+            name: "Connect and Protect: Networks and Network Security",
+            organization: "Google",
             date: "2024",
-            icon: "🎓",
+            icon: "🛡️",
             color: "cyber-green",
+            grade: "97.62%",
             link: "#"
         },
         {
             id: 2,
-            name: "AWS Certified Solutions Architect",
-            organization: "Amazon Web Services",
+            name: "Encryption and Cryptography Essentials",
+            organization: "IBM",
             date: "2024",
-            icon: "☁️",
-            color: "orange-500",
+            icon: "🔐",
+            color: "cyber-blue",
+            grade: "90%",
             link: "#"
         },
         {
             id: 3,
-            name: "Deep Learning Specialization",
-            organization: "DeepLearning.AI",
-            date: "2023",
-            icon: "🧠",
-            color: "cyber-blue",
+            name: "Play It Safe: Manage Security Risks",
+            organization: "Google",
+            date: "2024",
+            icon: "🔒",
+            color: "cyber-green",
+            grade: "91.39%",
             link: "#"
         },
         {
             id: 4,
-            name: "Google Cloud Associate",
-            organization: "Google Cloud",
-            date: "2023",
-            icon: "🌐",
-            color: "blue-500",
-            link: "#"
-        },
-        {
-            id: 5,
-            name: "Full Stack Web Development",
-            organization: "Udemy",
-            date: "2023",
-            icon: "💻",
-            color: "cyber-purple",
-            link: "#"
-        },
-        {
-            id: 6,
-            name: "Advanced Python Programming",
-            organization: "DataCamp",
-            date: "2023",
-            icon: "🐍",
-            color: "yellow-500",
+            name: "Foundations of Cybersecurity",
+            organization: "Google",
+            date: "2024",
+            icon: "🛡️",
+            color: "cyber-green",
+            grade: "93.06%",
             link: "#"
         }
     ];
@@ -127,9 +113,18 @@ const Certifications = () => {
                             </h3>
 
                             {/* Organization */}
-                            <p className="text-gray-400 text-sm mb-3">
+                            <p className="text-gray-400 text-sm mb-2">
                                 {cert.organization}
                             </p>
+
+                            {/* Grade Badge */}
+                            {cert.grade && (
+                                <div className="mb-3">
+                                    <span className="inline-block px-3 py-1 text-xs font-bold bg-cyber-green/10 text-cyber-green border border-cyber-green/30 rounded-full">
+                                        Grade: {cert.grade}
+                                    </span>
+                                </div>
+                            )}
 
                             {/* Date */}
                             <div className="flex items-center justify-between">
