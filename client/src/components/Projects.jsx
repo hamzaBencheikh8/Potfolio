@@ -203,7 +203,7 @@ const Projects = () => {
                             <h3 className="text-3xl font-bold mb-4 text-cyber-green">{selectedProject.title}</h3>
 
                             <div className="flex flex-wrap gap-2 mb-6">
-                                {selectedProject.tags.map((tag) => (
+                                {(selectedProject.technologies || selectedProject.tags || []).map((tag) => (
                                     <span key={tag} className={`px-3 py-1 text-xs font-medium rounded-full border glass ${getTagColor(tag)}`}>
                                         {tag}
                                     </span>
@@ -235,9 +235,9 @@ const Projects = () => {
                             )}
 
                             <div className="flex gap-4">
-                                {selectedProject.github && (
+                                {(selectedProject.githubUrl || selectedProject.github) && (
                                     <a
-                                        href={selectedProject.github}
+                                        href={selectedProject.githubUrl || selectedProject.github}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="flex items-center gap-2 px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors"
