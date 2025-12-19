@@ -12,10 +12,10 @@ const __dirname = path.dirname(__filename);
 // Path to testimonials JSON file
 const TESTIMONIALS_FILE = path.join(__dirname, '../data/testimonials.json');
 
-// Rate limiting: 3 testimonials per 15 minutes
+// Rate limiting: 10 testimonials per 15 minutes
 const testimonialLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 3,
+    max: 10,
     message: { error: 'Too many testimonials submitted. Please try again later.' }
 });
 
