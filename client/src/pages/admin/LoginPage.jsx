@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { login } from '../services/api';
+import { login } from '../../services/api';
 import { toast } from 'react-toastify';
 
 const LoginPage = () => {
