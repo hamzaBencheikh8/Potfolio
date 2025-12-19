@@ -7,6 +7,9 @@ import bodyParser from 'body-parser';
 import contactRoutes from './routes/contact.js';
 import projectRoutes from './routes/projects.js';
 import testimonialsRoutes from './routes/testimonials.js';
+import authRoutes from './routes/auth.js';
+import adminRoutes from './routes/admin.js';
+import uploadRoutes from './routes/upload.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -27,6 +30,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/contact', contactRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/testimonials', testimonialsRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Health check endpoint
 app.get('/', (req, res) => {

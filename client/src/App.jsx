@@ -1,4 +1,9 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Public components
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -10,20 +15,64 @@ import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
+// Admin components
+import PrivateRoute from './components/PrivateRoute';
+import AdminLayout from './components/AdminLayout';
+import LoginPage from './pages/admin/LoginPage';
+import DashboardPage from './pages/admin/DashboardPage';
+import TestimonialsManagement from './pages/admin/TestimonialsManagementPage';
+import ProjectsManagement from './pages/admin/ProjectsManagementPage';
+import CertificationsManagement from './pages/admin/CertificationsManagementPage';
+
 function App() {
     return (
-        <div className="App">
-            <Navbar />
-            <Hero />
-            <About />
-            <Skills />
-            <Certifications />
-            <Projects />
-            <Education />
-            <Testimonials />
-            <Contact />
-            <Footer />
-        </div>
+        <Router>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
+
+            <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={
+                    <div className="App">
+                        <Navbar />
+                        <Hero />
+                        <About />
+                        <Skills />
+                        <Certifications />
+                        <Projects />
+                        <Education />
+                        <Testimonials />
+                        <Contact />
+                        <Footer />
+                    </div>
+                } />
+
+                {/* Admin Login */}
+                <Route path="/admin/login" element={<LoginPage />} />
+
+                {/* Protected Admin Routes */}
+                <Route path="/admin" element={
+                    <PrivateRoute>
+                        <AdminLayout />
+                    </PrivateRoute>
+                }>
+                    <Route path="dashboard" element={<DashboardPage />} />
+                    <Route path="projects" element={<ProjectsManagement />} />
+                    <Route path="certifications" element={<CertificationsManagement />} />
+                    <Route path="testimonials" element={<TestimonialsManagement />} />
+                </Route>
+            </Routes>
+        </Router>
     );
 }
 
