@@ -8,7 +8,8 @@ const Testimonials = () => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
-    const [visibleCount, setVisibleCount] = useState(4); // Show 4 testimonials initially
+    const [currentPage, setCurrentPage] = useState(1);
+    const testimonialsPerPage = 4;
 
     // API URL (production vs development)
     const apiUrl = import.meta.env.PROD
@@ -189,60 +190,90 @@ const Testimonials = () => {
                             </div>
                         ) : (
                             <>
-                                {testimonials.slice(0, visibleCount).map((testimonial, index) => (
-                                    <motion.div
-                                        key={testimonial.id}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: index * 0.1 }}
-                                        className="glass p-6 rounded-xl border border-gray-700/50 hover:border-cyber-green/30 transition-colors"
-                                    >
-                                        <div className="flex items-start gap-4">
-                                            {/* Avatar */}
-                                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyber-green to-cyber-blue flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
-                                                {testimonial.name.charAt(0).toUpperCase()}
-                                            </div>
+                                {/* Calculate pagination */}
+                                {(() => {
+                                    const indexOfLastTestimonial = currentPage * testimonialsPerPage;
+                                    const indexOfFirstTestimonial = indexOfLastTestimonial - testimonialsPerPage;
+                                    const currentTestimonials = testimonials.slice(indexOfFirstTestimonial, indexOfLastTestimonial);
+                                    const totalPages = Math.ceil(testimonials.length / testimonialsPerPage);
 
-                                            <div className="flex-1">
-                                                <h4 className="font-bold text-white">
-                                                    {testimonial.name}
-                                                </h4>
-                                                {testimonial.position && (
-                                                    <p className="text-xs text-gray-400 mb-2">
-                                                        {testimonial.position}
-                                                    </p>
-                                                )}
-                                                <p className="text-gray-300 text-sm leading-relaxed">
-                                                    "{testimonial.message}"
-                                                </p>
-                                                <p className="text-xs text-gray-500 mt-2">
-                                                    {new Date(testimonial.date).toLocaleDateString()}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
+                                    return (
+                                        <>
+                                            {/* Display current page testimonials */}
+                                            {currentTestimonials.map((testimonial, index) => (
+                                                <motion.div
+                                                    key={testimonial.id}
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ delay: index * 0.1 }}
+                                                    className="glass p-6 rounded-xl border border-gray-700/50 hover:border-cyber-green/30 transition-colors"
+                                                >
+                                                    <div className="flex items-start gap-4">
+                                                        {/* Avatar */}
+                                                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyber-green to-cyber-blue flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
+                                                            {testimonial.name.charAt(0).toUpperCase()}
+                                                        </div>
 
-                                {/* Load More Button */}
-                                {visibleCount < testimonials.length && (
-                                    <motion.button
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        onClick={() => setVisibleCount(prev => prev + 4)}
-                                        className="w-full glass px-6 py-3 rounded-xl text-cyber-green border border-cyber-green/30 hover:bg-cyber-green/10 transition-all duration-300 font-semibold"
-                                    >
-                                        Load More ({testimonials.length - visibleCount} remaining)
-                                    </motion.button>
-                                )}
+                                                        <div className="flex-1">
+                                                            <h4 className="font-bold text-white">
+                                                                {testimonial.name}
+                                                            </h4>
+                                                            {testimonial.position && (
+                                                                <p className="text-xs text-gray-400 mb-2">
+                                                                    {testimonial.position}
+                                                                </p>
+                                                            )}
+                                                            <p className="text-gray-300 text-sm leading-relaxed">
+                                                                "{testimonial.message}"
+                                                            </p>
+                                                            <p className="text-xs text-gray-500 mt-2">
+                                                                {new Date(testimonial.date).toLocaleDateString()}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            ))}
 
-                                {/* All Loaded Message */}
-                                {visibleCount >= testimonials.length && testimonials.length > 4 && (
-                                    <p className="text-center text-gray-500 text-sm py-4">
-                                        All testimonials loaded ✓
-                                    </p>
-                                )}
+                                            {/* Pagination Controls */}
+                                            {totalPages > 1 && (
+                                                <div className="flex items-center justify-between gap-4 pt-4">
+                                                    {/* Previous Button */}
+                                                    <motion.button
+                                                        whileHover={{ scale: currentPage > 1 ? 1.02 : 1 }}
+                                                        whileTap={{ scale: currentPage > 1 ? 0.98 : 1 }}
+                                                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                                        disabled={currentPage === 1}
+                                                        className={`flex-1 glass px-6 py-3 rounded-xl border transition-all duration-300 font-semibold ${currentPage === 1
+                                                                ? 'opacity-50 cursor-not-allowed border-gray-700/30 text-gray-500'
+                                                                : 'border-cyber-green/30 text-cyber-green hover:bg-cyber-green/10'
+                                                            }`}
+                                                    >
+                                                        ← Previous
+                                                    </motion.button>
+
+                                                    {/* Page Indicator */}
+                                                    <div className="text-gray-400 text-sm font-mono px-4">
+                                                        Page {currentPage} / {totalPages}
+                                                    </div>
+
+                                                    {/* Next Button */}
+                                                    <motion.button
+                                                        whileHover={{ scale: currentPage < totalPages ? 1.02 : 1 }}
+                                                        whileTap={{ scale: currentPage < totalPages ? 0.98 : 1 }}
+                                                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                                        disabled={currentPage === totalPages}
+                                                        className={`flex-1 glass px-6 py-3 rounded-xl border transition-all duration-300 font-semibold ${currentPage === totalPages
+                                                                ? 'opacity-50 cursor-not-allowed border-gray-700/30 text-gray-500'
+                                                                : 'border-cyber-green/30 text-cyber-green hover:bg-cyber-green/10'
+                                                            }`}
+                                                    >
+                                                        Next →
+                                                    </motion.button>
+                                                </div>
+                                            )}
+                                        </>
+                                    );
+                                })()}
                             </>
                         )}
                     </motion.div>
