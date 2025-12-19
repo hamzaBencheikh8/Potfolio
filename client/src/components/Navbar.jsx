@@ -13,6 +13,18 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Block body scroll when mobile menu is open
+    useEffect(() => {
+        if (mobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [mobileMenuOpen]);
+
     const scrollToSection = (id) => {
         const element = document.getElementById(id);
         if (element) {
@@ -95,7 +107,7 @@ const Navbar = () => {
                         transition={{ type: 'tween', duration: 0.3 }}
                         className="fixed top-0 right-0 bottom-0 w-64 glass-strong md:hidden z-[60]"
                     >
-                        <div className="flex flex-col items-start justify-start h-full px-8 pt-24 pb-8 space-y-6 overflow-y-auto">
+                        <div className="flex flex-col items-start justify-center h-full px-8 space-y-6">
                             {menuItems.map((item, idx) => (
                                 <motion.button
                                     key={item}
