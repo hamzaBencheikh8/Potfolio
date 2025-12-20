@@ -126,6 +126,17 @@ const Projects = () => {
                                 className="glass p-6 rounded-xl neon-border-blue group cursor-pointer"
                                 onClick={() => setSelectedProject(project)}
                             >
+                                {/* Project Image */}
+                                {project.image && (
+                                    <div className="mb-4 overflow-hidden rounded-lg">
+                                        <img
+                                            src={project.image}
+                                            alt={project.title}
+                                            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                        />
+                                    </div>
+                                )}
+
                                 {/* Project Title */}
                                 <h3 className="text-2xl font-bold mb-3 text-cyber-green group-hover:text-cyber-blue transition-colors duration-300">
                                     {project.title}
@@ -199,6 +210,17 @@ const Projects = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
+
+                            {/* Project Image */}
+                            {selectedProject.image && (
+                                <div className="mb-6 overflow-hidden rounded-xl">
+                                    <img
+                                        src={selectedProject.image}
+                                        alt={selectedProject.title}
+                                        className="w-full h-64 object-cover"
+                                    />
+                                </div>
+                            )}
 
                             <h3 className="text-3xl font-bold mb-4 text-cyber-green">{selectedProject.title}</h3>
 
