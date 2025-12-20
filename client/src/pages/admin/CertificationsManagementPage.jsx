@@ -13,7 +13,13 @@ const CertificationsManagement = () => {
         issuer: '',
         date: '',
         credentialUrl: '',
-        badge: ''
+        badge: '',
+        grade: '',
+        category: '',
+        skills: '',
+        duration: '',
+        level: '',
+        description: ''
     });
 
     useEffect(() => {
@@ -69,7 +75,13 @@ const CertificationsManagement = () => {
                 issuer: cert.issuer,
                 date: cert.date,
                 credentialUrl: cert.credentialUrl || '',
-                badge: cert.badge || ''
+                badge: cert.badge || '',
+                grade: cert.grade || '',
+                category: cert.category || '',
+                skills: cert.skills || '',
+                duration: cert.duration || '',
+                level: cert.level || '',
+                description: cert.description || ''
             });
         } else {
             setEditingCert(null);
@@ -78,7 +90,13 @@ const CertificationsManagement = () => {
                 issuer: '',
                 date: '',
                 credentialUrl: '',
-                badge: ''
+                badge: '',
+                grade: '',
+                category: '',
+                skills: '',
+                duration: '',
+                level: '',
+                description: ''
             });
         }
         setShowModal(true);
@@ -92,7 +110,13 @@ const CertificationsManagement = () => {
             issuer: '',
             date: '',
             credentialUrl: '',
-            badge: ''
+            badge: '',
+            grade: '',
+            category: '',
+            skills: '',
+            duration: '',
+            level: '',
+            description: ''
         });
     };
 
@@ -223,6 +247,82 @@ const CertificationsManagement = () => {
                                     value={formData.credentialUrl}
                                     onChange={(e) => setFormData({ ...formData, credentialUrl: e.target.value })}
                                     placeholder="https://coursera.org/verify/..."
+                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-300 text-sm mb-2">Grade (%)</label>
+                                <input
+                                    type="text"
+                                    value={formData.grade}
+                                    onChange={(e) => setFormData({ ...formData, grade: e.target.value })}
+                                    placeholder="97.62"
+                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-300 text-sm mb-2">Category</label>
+                                <select
+                                    value={formData.category}
+                                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                >
+                                    <option value="">Select category</option>
+                                    <option value="Cybersecurity">Cybersecurity</option>
+                                    <option value="Cloud Computing">Cloud Computing</option>
+                                    <option value="Machine Learning">Machine Learning</option>
+                                    <option value="Data Science">Data Science</option>
+                                    <option value="Web Development">Web Development</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-300 text-sm mb-2">Skills (comma separated)</label>
+                                <input
+                                    type="text"
+                                    value={formData.skills}
+                                    onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
+                                    placeholder="Encryption, Network Security, Risk Management"
+                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-300 text-sm mb-2">Duration</label>
+                                <input
+                                    type="text"
+                                    value={formData.duration}
+                                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                                    placeholder="6 months"
+                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-300 text-sm mb-2">Level</label>
+                                <select
+                                    value={formData.level}
+                                    onChange={(e) => setFormData({ ...formData, level: e.target.value })}
+                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                >
+                                    <option value="">Select level</option>
+                                    <option value="Beginner">Beginner</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Advanced">Advanced</option>
+                                    <option value="Professional">Professional</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-300 text-sm mb-2">Description</label>
+                                <textarea
+                                    value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                    placeholder="Comprehensive program covering cybersecurity fundamentals, risk management, and practical security tools..."
+                                    rows={3}
                                     className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
                                 />
                             </div>
