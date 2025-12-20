@@ -186,162 +186,165 @@ const CertificationsManagement = () => {
             {/* Modal */}
             {showModal && (
                 <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-                    <div className="glass max-w-lg w-full p-6 rounded-xl border border-gray-700/50">
-                        <h2 className="text-2xl font-bold text-white mb-4">
-                            {editingCert ? 'Edit Certification' : 'New Certification'}
-                        </h2>
+                    <div className="glass max-w-lg w-full rounded-xl border border-gray-700/50 max-h-[90vh] flex flex-col">
+                        <div className="p-6 border-b border-gray-700/50">
+                            <h2 className="text-2xl font-bold text-white">
+                                {editingCert ? 'Edit Certification' : 'New Certification'}
+                            </h2>
+                        </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div>
-                                <label className="block text-gray-300 text-sm mb-2">Title *</label>
-                                <input
-                                    type="text"
-                                    value={formData.title}
-                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                    required
-                                    placeholder="Google Cybersecurity Professional Certificate"
-                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
-                                />
-                            </div>
+                        <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+                            <div className="overflow-y-auto p-6 space-y-4">
+                                <div>
+                                    <label className="block text-gray-300 text-sm mb-2">Title *</label>
+                                    <input
+                                        type="text"
+                                        value={formData.title}
+                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                        required
+                                        placeholder="Google Cybersecurity Professional Certificate"
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                    />
+                                </div>
 
-                            <div>
-                                <label className="block text-gray-300 text-sm mb-2">Issuer *</label>
-                                <input
-                                    type="text"
-                                    value={formData.issuer}
-                                    onChange={(e) => setFormData({ ...formData, issuer: e.target.value })}
-                                    required
-                                    placeholder="Google / Coursera"
-                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
-                                />
-                            </div>
+                                <div>
+                                    <label className="block text-gray-300 text-sm mb-2">Issuer *</label>
+                                    <input
+                                        type="text"
+                                        value={formData.issuer}
+                                        onChange={(e) => setFormData({ ...formData, issuer: e.target.value })}
+                                        required
+                                        placeholder="Google / Coursera"
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                    />
+                                </div>
 
-                            <div>
-                                <label className="block text-gray-300 text-sm mb-2">Date *</label>
-                                <input
-                                    type="text"
-                                    value={formData.date}
-                                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                    required
-                                    placeholder="December 2024"
-                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
-                                />
-                            </div>
+                                <div>
+                                    <label className="block text-gray-300 text-sm mb-2">Date *</label>
+                                    <input
+                                        type="text"
+                                        value={formData.date}
+                                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                        required
+                                        placeholder="December 2024"
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                    />
+                                </div>
 
-                            <div>
-                                <label className="block text-gray-300 text-sm mb-2">Badge Emoji</label>
-                                <input
-                                    type="text"
-                                    value={formData.badge}
-                                    onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                                    placeholder="🛡️ or 🎓"
-                                    maxLength={2}
-                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
-                                />
-                            </div>
+                                <div>
+                                    <label className="block text-gray-300 text-sm mb-2">Badge Emoji</label>
+                                    <input
+                                        type="text"
+                                        value={formData.badge}
+                                        onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
+                                        placeholder="🛡️ or 🎓"
+                                        maxLength={2}
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                    />
+                                </div>
 
-                            <div>
-                                <label className="block text-gray-300 text-sm mb-2">Credential URL</label>
-                                <input
-                                    type="url"
-                                    value={formData.credentialUrl}
-                                    onChange={(e) => setFormData({ ...formData, credentialUrl: e.target.value })}
-                                    placeholder="https://coursera.org/verify/..."
-                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
-                                />
-                            </div>
+                                <div>
+                                    <label className="block text-gray-300 text-sm mb-2">Credential URL</label>
+                                    <input
+                                        type="url"
+                                        value={formData.credentialUrl}
+                                        onChange={(e) => setFormData({ ...formData, credentialUrl: e.target.value })}
+                                        placeholder="https://coursera.org/verify/..."
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                    />
+                                </div>
 
-                            <div>
-                                <label className="block text-gray-300 text-sm mb-2">Grade (%)</label>
-                                <input
-                                    type="text"
-                                    value={formData.grade}
-                                    onChange={(e) => setFormData({ ...formData, grade: e.target.value })}
-                                    placeholder="97.62"
-                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
-                                />
-                            </div>
+                                <div>
+                                    <label className="block text-gray-300 text-sm mb-2">Grade (%)</label>
+                                    <input
+                                        type="text"
+                                        value={formData.grade}
+                                        onChange={(e) => setFormData({ ...formData, grade: e.target.value })}
+                                        placeholder="97.62"
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                    />
+                                </div>
 
-                            <div>
-                                <label className="block text-gray-300 text-sm mb-2">Category</label>
-                                <select
-                                    value={formData.category}
-                                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
-                                >
-                                    <option value="">Select category</option>
-                                    <option value="Cybersecurity">Cybersecurity</option>
-                                    <option value="Cloud Computing">Cloud Computing</option>
-                                    <option value="Machine Learning">Machine Learning</option>
-                                    <option value="Data Science">Data Science</option>
-                                    <option value="Web Development">Web Development</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
+                                <div>
+                                    <label className="block text-gray-300 text-sm mb-2">Category</label>
+                                    <select
+                                        value={formData.category}
+                                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                    >
+                                        <option value="">Select category</option>
+                                        <option value="Cybersecurity">Cybersecurity</option>
+                                        <option value="Cloud Computing">Cloud Computing</option>
+                                        <option value="Machine Learning">Machine Learning</option>
+                                        <option value="Data Science">Data Science</option>
+                                        <option value="Web Development">Web Development</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
 
-                            <div>
-                                <label className="block text-gray-300 text-sm mb-2">Skills (comma separated)</label>
-                                <input
-                                    type="text"
-                                    value={formData.skills}
-                                    onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
-                                    placeholder="Encryption, Network Security, Risk Management"
-                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
-                                />
-                            </div>
+                                <div>
+                                    <label className="block text-gray-300 text-sm mb-2">Skills (comma separated)</label>
+                                    <input
+                                        type="text"
+                                        value={formData.skills}
+                                        onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
+                                        placeholder="Encryption, Network Security, Risk Management"
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                    />
+                                </div>
 
-                            <div>
-                                <label className="block text-gray-300 text-sm mb-2">Duration</label>
-                                <input
-                                    type="text"
-                                    value={formData.duration}
-                                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                                    placeholder="6 months"
-                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
-                                />
-                            </div>
+                                <div>
+                                    <label className="block text-gray-300 text-sm mb-2">Duration</label>
+                                    <input
+                                        type="text"
+                                        value={formData.duration}
+                                        onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                                        placeholder="6 months"
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                    />
+                                </div>
 
-                            <div>
-                                <label className="block text-gray-300 text-sm mb-2">Level</label>
-                                <select
-                                    value={formData.level}
-                                    onChange={(e) => setFormData({ ...formData, level: e.target.value })}
-                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
-                                >
-                                    <option value="">Select level</option>
-                                    <option value="Beginner">Beginner</option>
-                                    <option value="Intermediate">Intermediate</option>
-                                    <option value="Advanced">Advanced</option>
-                                    <option value="Professional">Professional</option>
-                                </select>
-                            </div>
+                                <div>
+                                    <label className="block text-gray-300 text-sm mb-2">Level</label>
+                                    <select
+                                        value={formData.level}
+                                        onChange={(e) => setFormData({ ...formData, level: e.target.value })}
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                    >
+                                        <option value="">Select level</option>
+                                        <option value="Beginner">Beginner</option>
+                                        <option value="Intermediate">Intermediate</option>
+                                        <option value="Advanced">Advanced</option>
+                                        <option value="Professional">Professional</option>
+                                    </select>
+                                </div>
 
-                            <div>
-                                <label className="block text-gray-300 text-sm mb-2">Description</label>
-                                <textarea
-                                    value={formData.description}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                    placeholder="Comprehensive program covering cybersecurity fundamentals, risk management, and practical security tools..."
-                                    rows={3}
-                                    className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
-                                />
-                            </div>
+                                <div>
+                                    <label className="block text-gray-300 text-sm mb-2">Description</label>
+                                    <textarea
+                                        value={formData.description}
+                                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                        placeholder="Comprehensive program covering cybersecurity fundamentals, risk management, and practical security tools..."
+                                        rows={3}
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
+                                    />
+                                </div>
 
-                            <div className="flex gap-3 pt-4">
-                                <button
-                                    type="submit"
-                                    className="flex-1 glass px-6 py-2 rounded-lg text-cyber-blue border border-cyber-blue/30 hover:bg-cyber-blue/10 transition-all"
-                                >
-                                    {editingCert ? 'Update' : 'Create'} Certification
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={closeModal}
-                                    className="flex-1 glass px-6 py-2 rounded-lg text-gray-400 border border-gray-700/30 hover:bg-gray-800/50 transition-all"
-                                >
-                                    Cancel
-                                </button>
-                            </div>
+                                <div className="flex gap-3 pt-4">
+                                    <button
+                                        type="submit"
+                                        className="flex-1 glass px-6 py-2 rounded-lg text-cyber-blue border border-cyber-blue/30 hover:bg-cyber-blue/10 transition-all"
+                                    >
+                                        {editingCert ? 'Update' : 'Create'} Certification
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={closeModal}
+                                        className="flex-1 glass px-6 py-2 rounded-lg text-gray-400 border border-gray-700/30 hover:bg-gray-800/50 transition-all"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
                         </form>
                     </div>
                 </div>
