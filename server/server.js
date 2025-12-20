@@ -7,6 +7,7 @@ import bodyParser from 'body-parser';
 import initializeDatabase from './config/initDB.js';
 import contactRoutes from './routes/contact.js';
 import projectRoutes from './routes/projects.js';
+import certificationsRoutes from './routes/certifications.js';
 import testimonialsRoutes from './routes/testimonials.js';
 import authRoutes from './routes/auth.js';
 import adminRoutes from './routes/admin.js';
@@ -45,7 +46,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Routes
 app.use('/api/contact', contactRoutes);
 app.use('/api/projects', projectRoutes);
-app.use('/api/certifications', require('./routes/certifications'));
+app.use('/api/certifications', certificationsRoutes);
 app.use('/api/testimonials', testimonialsRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
