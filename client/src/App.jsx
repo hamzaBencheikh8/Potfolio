@@ -14,6 +14,7 @@ import Education from './components/Education';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ChatBot from './components/ChatBot';
 
 // Admin components
 import PrivateRoute from './components/PrivateRoute';
@@ -39,6 +40,9 @@ function App() {
                 pauseOnHover
                 theme="dark"
             />
+
+            {/* AI Chatbot - Available on all pages */}
+            <ChatBot />
 
             <Routes>
                 {/* Public Routes */}
