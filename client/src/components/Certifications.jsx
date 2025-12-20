@@ -119,7 +119,7 @@ const Certifications = () => {
                                 )}
 
                                 {/* Skills Tags */}
-                                {cert.skills && cert.skills.length > 0 && (
+                                {cert.skills && Array.isArray(cert.skills) && cert.skills.length > 0 && (
                                     <div className="flex flex-wrap gap-1 mb-3">
                                         {cert.skills.slice(0, 3).map((skill, idx) => (
                                             <span key={idx} className="text-xs px-2 py-1 bg-gray-700/50 text-gray-300 rounded">
