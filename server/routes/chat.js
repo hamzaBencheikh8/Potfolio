@@ -92,9 +92,9 @@ router.post('/', async (req, res) => {
         // Prepare the prompt with context
         const promptWithContext = `${SYSTEM_CONTEXT}\n\nUser: ${message}\n\nAssistant:`;
 
-        // Call Gemini API directly using fetch
+        // Call Gemini API directly using fetch (v1beta endpoint)
         const apiKey = process.env.GEMINI_API_KEY;
-        const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         const response = await fetch(apiUrl, {
             method: 'POST',
