@@ -41,7 +41,7 @@ export const getTestimonials = () => api.get('/admin/testimonials');
 export const approveTestimonial = (id) => api.put(`/admin/testimonials/${id}/approve`);
 export const deleteTestimonial = (id) => api.delete(`/admin/testimonials/${id}`);
 export const getStats = () => api.get('/admin/stats');
-export const uploadImage = (formData) => api.post('/upload/upload', formData, {
+export const uploadImage = (formData) => api.post('/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
 });
 
