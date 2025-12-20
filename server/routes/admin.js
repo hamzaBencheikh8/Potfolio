@@ -135,11 +135,21 @@ router.get('/certifications', authMiddleware, async (req, res) => {
 // Create certification
 router.post('/certifications', authMiddleware, async (req, res) => {
     try {
-        const { title, issuer, date, credentialUrl, badge } = req.body;
+        const {
+            title, issuer, date, credentialUrl, badge,
+            grade, category, expiryDate, skills, description, certificateImage
+        } = req.body;
 
         const result = await pool.query(
-            'INSERT INTO certifications (title, issuer, date, credential_url, badge) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [title, issuer, date, credentialUrl || null, badge || null]
+            `INSERT INTO certifications (
+                title, issuer, date, credential_url, badge,
+                grade, category, expiry_date, skills, description, certificate_image
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
+            [
+                title, issuer, date, credentialUrl || null, badge || null,
+                grade || null, category || null, expiryDate || null, skills || null,
+                description || null, certificateImage || null
+            ]
         );
 
         res.status(201).json({ success: true, certification: toCamelCase(result.rows[0]) });
@@ -153,11 +163,22 @@ router.post('/certifications', authMiddleware, async (req, res) => {
 router.put('/certifications/:id', authMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, issuer, date, credentialUrl, badge } = req.body;
+        const {
+            title, issuer, date, credentialUrl, badge,
+            grade, category, expiryDate, skills, description, certificateImage
+        } = req.body;
 
         const result = await pool.query(
-            'UPDATE certifications SET title = $1, issuer = $2, date = $3, credential_url = $4, badge = $5 WHERE id = $6 RETURNING *',
-            [title, issuer, date, credentialUrl || null, badge || null, id]
+            `UPDATE certifications SET 
+                title = $1, issuer = $2, date = $3, credential_url = $4, badge = $5,
+                grade = $6, category = $7, expiry_date = $8, skills = $9, 
+                description = $10, certificate_image = $11
+             WHERE id = $12 RETURNING *`,
+            [
+                title, issuer, date, credentialUrl || null, badge || null,
+                grade || null, category || null, expiryDate || null, skills || null,
+                description || null, certificateImage || null, id
+            ]
         );
 
         if (result.rows.length === 0) {

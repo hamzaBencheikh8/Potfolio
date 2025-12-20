@@ -45,6 +45,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Routes
 app.use('/api/contact', contactRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/certifications', require('./routes/certifications'));
 app.use('/api/testimonials', testimonialsRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);

@@ -30,6 +30,12 @@ CREATE TABLE IF NOT EXISTS certifications (
     date VARCHAR(100) NOT NULL,
     credential_url VARCHAR(500),
     badge VARCHAR(10),
+    grade VARCHAR(20),
+    category VARCHAR(100),
+    expiry_date DATE,
+    skills TEXT[],
+    description TEXT,
+    certificate_image VARCHAR(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -48,5 +54,7 @@ CREATE INDEX IF NOT EXISTS idx_projects_created_at ON projects(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status);
 CREATE INDEX IF NOT EXISTS idx_projects_type ON projects(project_type);
 CREATE INDEX IF NOT EXISTS idx_certifications_created_at ON certifications(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_certifications_category ON certifications(category);
+CREATE INDEX IF NOT EXISTS idx_certifications_expiry ON certifications(expiry_date);
 CREATE INDEX IF NOT EXISTS idx_testimonials_approved ON testimonials(approved);
 CREATE INDEX IF NOT EXISTS idx_testimonials_created_at ON testimonials(created_at DESC);
