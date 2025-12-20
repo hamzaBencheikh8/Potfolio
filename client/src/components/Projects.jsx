@@ -224,6 +224,53 @@ const Projects = () => {
 
                             <h3 className="text-3xl font-bold mb-4 text-cyber-green">{selectedProject.title}</h3>
 
+                            {/* Project Metadata Badges */}
+                            <div className="flex flex-wrap gap-2 mb-4">
+                                {selectedProject.status && (
+                                    <span className={`px-3 py-1 text-xs font-semibold rounded-full ${selectedProject.status === 'Completed' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                                        selectedProject.status === 'In Progress' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                                            'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                                        }`}>
+                                        {selectedProject.status === 'Completed' ? '✅' : selectedProject.status === 'In Progress' ? '🚧' : '📦'} {selectedProject.status}
+                                    </span>
+                                )}
+                                {selectedProject.projectType && (
+                                    <span className="px-3 py-1 text-xs font-semibold rounded-full bg-cyber-blue/20 text-cyber-blue border border-cyber-blue/30">
+                                        {selectedProject.projectType === 'Personal' ? '👤' :
+                                            selectedProject.projectType === 'Academic' ? '🎓' :
+                                                selectedProject.projectType === 'Professional' ? '💼' : '🌐'} {selectedProject.projectType}
+                                    </span>
+                                )}
+                            </div>
+
+                            {/* Project Info Row */}
+                            <div className="flex flex-wrap gap-4 text-sm text-gray-400 mb-6">
+                                {selectedProject.completionDate && (
+                                    <div className="flex items-center gap-1">
+                                        <span>📅</span>
+                                        <span>{new Date(selectedProject.completionDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}</span>
+                                    </div>
+                                )}
+                                {selectedProject.teamSize && (
+                                    <div className="flex items-center gap-1">
+                                        <span>👥</span>
+                                        <span>{selectedProject.teamSize}</span>
+                                    </div>
+                                )}
+                                {selectedProject.duration && (
+                                    <div className="flex items-center gap-1">
+                                        <span>⏱️</span>
+                                        <span>{selectedProject.duration}</span>
+                                    </div>
+                                )}
+                                {selectedProject.client && (
+                                    <div className="flex items-center gap-1">
+                                        <span>🏢</span>
+                                        <span>{selectedProject.client}</span>
+                                    </div>
+                                )}
+                            </div>
+
                             <div className="flex flex-wrap gap-2 mb-6">
                                 {(selectedProject.technologies || selectedProject.tags || []).map((tag) => (
                                     <span key={tag} className={`px-3 py-1 text-xs font-medium rounded-full border glass ${getTagColor(tag)}`}>
@@ -235,6 +282,38 @@ const Projects = () => {
                             <p className="text-gray-300 text-lg leading-relaxed mb-6">
                                 {selectedProject.fullDescription || selectedProject.description}
                             </p>
+
+                            {/* Key Features Section */}
+                            {(selectedProject.keyFeatures && selectedProject.keyFeatures.length > 0) && (
+                                <div className="mb-6">
+                                    <h4 className="text-xl font-semibold text-cyber-blue mb-3">✨ Key Features</h4>
+                                    <ul className="list-disc list-inside space-y-2 text-gray-400">
+                                        {selectedProject.keyFeatures.map((feature, i) => (
+                                            <li key={i}>{feature}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
+                            {/* Challenges Section */}
+                            {selectedProject.challenges && (
+                                <div className="mb-6">
+                                    <h4 className="text-xl font-semibold text-cyber-blue mb-3">💪 Challenges</h4>
+                                    <p className="text-gray-400 leading-relaxed">
+                                        {selectedProject.challenges}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Results Section */}
+                            {selectedProject.results && (
+                                <div className="mb-6">
+                                    <h4 className="text-xl font-semibold text-cyber-blue mb-3">🎯 Results & Impact</h4>
+                                    <p className="text-gray-400 leading-relaxed">
+                                        {selectedProject.results}
+                                    </p>
+                                </div>
+                            )}
 
                             {selectedProject.features && (
                                 <div className="mb-6">
@@ -257,6 +336,19 @@ const Projects = () => {
                             )}
 
                             <div className="flex gap-4">
+                                {selectedProject.demoVideoUrl && (
+                                    <a
+                                        href={selectedProject.demoVideoUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                                    >
+                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                                        </svg>
+                                        Watch Demo
+                                    </a>
+                                )}
                                 {(selectedProject.githubUrl || selectedProject.github) && (
                                     <a
                                         href={selectedProject.githubUrl || selectedProject.github}

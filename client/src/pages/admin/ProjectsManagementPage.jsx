@@ -14,7 +14,18 @@ const ProjectsManagement = () => {
         technologies: '',
         liveUrl: '',
         githubUrl: '',
-        image: ''
+        image: '',
+        // New enhanced fields
+        completionDate: '',
+        status: 'Completed',
+        teamSize: '',
+        duration: '',
+        client: '',
+        keyFeatures: '',
+        challenges: '',
+        results: '',
+        demoVideoUrl: '',
+        projectType: 'Personal'
     });
     const [uploading, setUploading] = useState(false);
 
@@ -57,7 +68,8 @@ const ProjectsManagement = () => {
 
         const projectData = {
             ...formData,
-            technologies: formData.technologies.split(',').map(t => t.trim())
+            technologies: formData.technologies.split(',').map(t => t.trim()),
+            keyFeatures: formData.keyFeatures ? formData.keyFeatures.split(',').map(f => f.trim()) : null
         };
 
         try {
@@ -96,7 +108,18 @@ const ProjectsManagement = () => {
                 technologies: Array.isArray(project.technologies) ? project.technologies.join(', ') : '',
                 liveUrl: project.liveUrl || '',
                 githubUrl: project.githubUrl || '',
-                image: project.image || ''
+                image: project.image || '',
+                // New enhanced fields
+                completionDate: project.completionDate || '',
+                status: project.status || 'Completed',
+                teamSize: project.teamSize || '',
+                duration: project.duration || '',
+                client: project.client || '',
+                keyFeatures: Array.isArray(project.keyFeatures) ? project.keyFeatures.join(', ') : '',
+                challenges: project.challenges || '',
+                results: project.results || '',
+                demoVideoUrl: project.demoVideoUrl || '',
+                projectType: project.projectType || 'Personal'
             });
         } else {
             setEditingProject(null);
@@ -106,7 +129,17 @@ const ProjectsManagement = () => {
                 technologies: '',
                 liveUrl: '',
                 githubUrl: '',
-                image: ''
+                image: '',
+                completionDate: '',
+                status: 'Completed',
+                teamSize: '',
+                duration: '',
+                client: '',
+                keyFeatures: '',
+                challenges: '',
+                results: '',
+                demoVideoUrl: '',
+                projectType: 'Personal'
             });
         }
         setShowModal(true);
@@ -254,6 +287,138 @@ const ProjectsManagement = () => {
                                 {formData.image && (
                                     <img src={formData.image} alt="Preview" className="mt-2 w-full h-40 object-cover rounded-lg" />
                                 )}
+                            </div>
+
+                            {/* Enhanced Project Details Section */}
+                            <div className="pt-4 border-t border-gray-700/50">
+                                <h3 className="text-lg font-semibold text-cyber-green mb-4">📋 Project Details</h3>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-gray-300 text-sm mb-2">Completion Date</label>
+                                        <input
+                                            type="date"
+                                            value={formData.completionDate}
+                                            onChange={(e) => setFormData({ ...formData, completionDate: e.target.value })}
+                                            className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-green focus:outline-none"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-gray-300 text-sm mb-2">Status</label>
+                                        <select
+                                            value={formData.status}
+                                            onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                                            className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-green focus:outline-none"
+                                        >
+                                            <option value="Completed">✅ Completed</option>
+                                            <option value="In Progress">🚧 In Progress</option>
+                                            <option value="Archived">📦 Archived</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-gray-300 text-sm mb-2">Team Size</label>
+                                        <select
+                                            value={formData.teamSize}
+                                            onChange={(e) => setFormData({ ...formData, teamSize: e.target.value })}
+                                            className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-green focus:outline-none"
+                                        >
+                                            <option value="">Select size...</option>
+                                            <option value="Solo">Solo (1 person)</option>
+                                            <option value="Small Team">Small Team (2-5)</option>
+                                            <option value="Medium Team">Medium Team (6-10)</option>
+                                            <option value="Large Team">Large Team (10+)</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-gray-300 text-sm mb-2">Duration</label>
+                                        <input
+                                            type="text"
+                                            value={formData.duration}
+                                            onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                                            placeholder="e.g., 2 weeks, 3 months"
+                                            className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-green focus:outline-none"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-gray-300 text-sm mb-2">Project Type</label>
+                                        <select
+                                            value={formData.projectType}
+                                            onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
+                                            className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-green focus:outline-none"
+                                        >
+                                            <option value="Personal">👤 Personal</option>
+                                            <option value="Academic">🎓 Academic</option>
+                                            <option value="Professional">💼 Professional</option>
+                                            <option value="Open Source">🌐 Open Source</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-gray-300 text-sm mb-2">Client/Company</label>
+                                        <input
+                                            type="text"
+                                            value={formData.client}
+                                            onChange={(e) => setFormData({ ...formData, client: e.target.value })}
+                                            placeholder="Optional"
+                                            className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-green focus:outline-none"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Additional Information Section */}
+                            <div className="pt-4 border-t border-gray-700/50">
+                                <h3 className="text-lg font-semibold text-cyber-green mb-4">✨ Additional Information</h3>
+
+                                <div>
+                                    <label className="block text-gray-300 text-sm mb-2">
+                                        Key Features <span className="text-gray-500 text-xs">(comma-separated)</span>
+                                    </label>
+                                    <textarea
+                                        value={formData.keyFeatures}
+                                        onChange={(e) => setFormData({ ...formData, keyFeatures: e.target.value })}
+                                        placeholder="Feature 1, Feature 2, Feature 3..."
+                                        rows={2}
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-green focus:outline-none"
+                                    />
+                                </div>
+
+                                <div className="mt-4">
+                                    <label className="block text-gray-300 text-sm mb-2">Challenges Faced</label>
+                                    <textarea
+                                        value={formData.challenges}
+                                        onChange={(e) => setFormData({ ...formData, challenges: e.target.value })}
+                                        placeholder="Describe technical challenges or obstacles..."
+                                        rows={3}
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-green focus:outline-none"
+                                    />
+                                </div>
+
+                                <div className="mt-4">
+                                    <label className="block text-gray-300 text-sm mb-2">Results & Impact</label>
+                                    <textarea
+                                        value={formData.results}
+                                        onChange={(e) => setFormData({ ...formData, results: e.target.value })}
+                                        placeholder="Describe outcomes, metrics, achievements..."
+                                        rows={3}
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-green focus:outline-none"
+                                    />
+                                </div>
+
+                                <div className="mt-4">
+                                    <label className="block text-gray-300 text-sm mb-2">Demo Video URL</label>
+                                    <input
+                                        type="url"
+                                        value={formData.demoVideoUrl}
+                                        onChange={(e) => setFormData({ ...formData, demoVideoUrl: e.target.value })}
+                                        placeholder="https://youtube.com/..."
+                                        className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-green focus:outline-none"
+                                    />
+                                </div>
                             </div>
 
                             <div className="flex gap-3 pt-4">

@@ -35,11 +35,23 @@ router.get('/projects', authMiddleware, async (req, res) => {
 // Create project
 router.post('/projects', authMiddleware, async (req, res) => {
     try {
-        const { title, description, technologies, liveUrl, githubUrl, image } = req.body;
+        const {
+            title, description, technologies, liveUrl, githubUrl, image,
+            completionDate, status, teamSize, duration, client,
+            keyFeatures, challenges, results, demoVideoUrl, projectType
+        } = req.body;
 
         const result = await pool.query(
-            'INSERT INTO projects (title, description, technologies, live_url, github_url, image) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-            [title, description, technologies, liveUrl || null, githubUrl || null, image || null]
+            `INSERT INTO projects (
+                title, description, technologies, live_url, github_url, image,
+                completion_date, status, team_size, duration, client,
+                key_features, challenges, results, demo_video_url, project_type
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) RETURNING *`,
+            [
+                title, description, technologies, liveUrl || null, githubUrl || null, image || null,
+                completionDate || null, status || 'Completed', teamSize || null, duration || null, client || null,
+                keyFeatures || null, challenges || null, results || null, demoVideoUrl || null, projectType || 'Personal'
+            ]
         );
 
         res.status(201).json({ success: true, project: toCamelCase(result.rows[0]) });
@@ -53,11 +65,23 @@ router.post('/projects', authMiddleware, async (req, res) => {
 router.put('/projects/:id', authMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description, technologies, liveUrl, githubUrl, image } = req.body;
+        const {
+            title, description, technologies, liveUrl, githubUrl, image,
+            completionDate, status, teamSize, duration, client,
+            keyFeatures, challenges, results, demoVideoUrl, projectType
+        } = req.body;
 
         const result = await pool.query(
-            'UPDATE projects SET title = $1, description = $2, technologies = $3, live_url = $4, github_url = $5, image = $6 WHERE id = $7 RETURNING *',
-            [title, description, technologies, liveUrl || null, githubUrl || null, image || null, id]
+            `UPDATE projects SET 
+                title = $1, description = $2, technologies = $3, live_url = $4, github_url = $5, image = $6,
+                completion_date = $7, status = $8, team_size = $9, duration = $10, client = $11,
+                key_features = $12, challenges = $13, results = $14, demo_video_url = $15, project_type = $16
+             WHERE id = $17 RETURNING *`,
+            [
+                title, description, technologies, liveUrl || null, githubUrl || null, image || null,
+                completionDate || null, status, teamSize || null, duration || null, client || null,
+                keyFeatures || null, challenges || null, results || null, demoVideoUrl || null, projectType, id
+            ]
         );
 
         if (result.rows.length === 0) {
