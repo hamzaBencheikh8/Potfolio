@@ -6,6 +6,8 @@ const Certifications = () => {
     const [certifications, setCertifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const certificationsPerPage = 6;
 
     useEffect(() => {
         const fetchCertifications = async () => {
@@ -27,6 +29,20 @@ const Certifications = () => {
 
         fetchCertifications();
     }, []);
+
+    // Pagination calculations
+    const indexOfLastCert = currentPage * certificationsPerPage;
+    const indexOfFirstCert = indexOfLastCert - certificationsPerPage;
+    const currentCertifications = certifications.slice(indexOfFirstCert, indexOfLastCert);
+    const totalPages = Math.ceil(certifications.length / certificationsPerPage);
+
+    const goToNextPage = () => {
+        setCurrentPage(prev => Math.min(prev + 1, totalPages));
+    };
+
+    const goToPreviousPage = () => {
+        setCurrentPage(prev => Math.max(prev - 1, 1));
+    };
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -88,7 +104,7 @@ const Certifications = () => {
                             <p className="text-gray-400">No certifications found</p>
                         </div>
                     ) : (
-                        certifications.map((cert) => (
+                        currentCertifications.map((cert) => (
                             <motion.a
                                 key={cert.id}
                                 href={cert.credentialUrl || '#'}
@@ -163,10 +179,45 @@ const Certifications = () => {
                     )}
                 </motion.div>
 
-                {/* Background Decoration */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyber-green/5 rounded-full blur-3xl -z-10"></div>
-            </div>
-        </section>
+                {/* Pagination Controls */}
+                {!loading && !error && certifications.length > certificationsPerPage && (
+                    <div className="flex justify-center items-center gap-4 mt-12">
+                        <motion.button
+                            onClick={goToPreviousPage}
+                            disabled={currentPage === 1}
+                            whileHover={{ scale: currentPage === 1 ? 1 : 1.05 }}
+                            whileTap={{ scale: currentPage === 1 ? 1 : 0.95 }}
+                            className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${currentPage === 1
+                                    ? 'bg-gray-700/30 text-gray-500 cursor-not-allowed'
+                                    : 'bg-cyber-green/20 text-cyber-green border border-cyber-green/30 hover:bg-cyber-green/30'
+                                }`}
+                        >
+                            ← Previous
+                        </motion.button>
+
+                        <div className="text-gray-400 font-mono">
+                            <span className="text-cyber-green font-bold">{currentPage}</span> / {totalPages}
+                        </div>
+
+                        <motion.button
+                            onClick={goToNext Page}
+                        disabled={currentPage === totalPages}
+                        whileHover={{ scale: currentPage === totalPages ? 1 : 1.05 }}
+                        whileTap={{ scale: currentPage === totalPages ? 1 : 0.95 }}
+                        className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${currentPage === totalPages
+                                ? 'bg-gray-700/30 text-gray-500 cursor-not-allowed'
+                                : 'bg-cyber-green/20 text-cyber-green border border-cyber-green/30 hover:bg-cyber-green/30'
+                            }`}
+                        >
+                        Next →
+                    </motion.button>
+                    </div>
+                )}
+
+            {/* Background Decoration */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyber-green/5 rounded-full blur-3xl -z-10"></div>
+        </div>
+        </section >
     );
 };
 
