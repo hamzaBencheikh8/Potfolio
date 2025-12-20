@@ -188,8 +188,8 @@ const Certifications = () => {
                             whileHover={{ scale: currentPage === 1 ? 1 : 1.05 }}
                             whileTap={{ scale: currentPage === 1 ? 1 : 0.95 }}
                             className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${currentPage === 1
-                                    ? 'bg-gray-700/30 text-gray-500 cursor-not-allowed'
-                                    : 'bg-cyber-green/20 text-cyber-green border border-cyber-green/30 hover:bg-cyber-green/30'
+                                ? 'bg-gray-700/30 text-gray-500 cursor-not-allowed'
+                                : 'bg-cyber-green/20 text-cyber-green border border-cyber-green/30 hover:bg-cyber-green/30'
                                 }`}
                         >
                             ← Previous
@@ -200,23 +200,23 @@ const Certifications = () => {
                         </div>
 
                         <motion.button
-                            onClick={goToNext Page}
-                        disabled={currentPage === totalPages}
-                        whileHover={{ scale: currentPage === totalPages ? 1 : 1.05 }}
-                        whileTap={{ scale: currentPage === totalPages ? 1 : 0.95 }}
-                        className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${currentPage === totalPages
+                            onClick={goToNextPage}
+                            disabled={currentPage === totalPages}
+                            whileHover={{ scale: currentPage === totalPages ? 1 : 1.05 }}
+                            whileTap={{ scale: currentPage === totalPages ? 1 : 0.95 }}
+                            className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${currentPage === totalPages
                                 ? 'bg-gray-700/30 text-gray-500 cursor-not-allowed'
                                 : 'bg-cyber-green/20 text-cyber-green border border-cyber-green/30 hover:bg-cyber-green/30'
-                            }`}
+                                }`}
                         >
-                        Next →
-                    </motion.button>
+                            Next →
+                        </motion.button>
                     </div>
                 )}
 
-            {/* Background Decoration */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyber-green/5 rounded-full blur-3xl -z-10"></div>
-        </div>
+                {/* Background Decoration */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyber-green/5 rounded-full blur-3xl -z-10"></div>
+            </div>
         </section >
     );
 };
