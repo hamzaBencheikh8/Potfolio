@@ -95,12 +95,12 @@ router.post('/', async (req, res) => {
 
         // Initialize the model with system instruction
         const model = genAI.getGenerativeModel({
-            model: "gemini-pro",
-            systemInstruction: SYSTEM_CONTEXT
+            model: "gemini-1.5-pro"
         });
 
-        // Generate response
-        const result = await model.generateContent(message);
+        // Generate response with system context prepended to message
+        const promptWithContext = `${SYSTEM_CONTEXT}\n\nUser: ${message}\n\nAssistant:`;
+        const result = await model.generateContent(promptWithContext);
         const reply = result.response.text();
 
         res.json({ reply });
