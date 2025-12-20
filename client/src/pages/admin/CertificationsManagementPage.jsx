@@ -329,8 +329,10 @@ const CertificationsManagement = () => {
                                         className="w-full px-4 py-2 bg-dark-bg/50 border border-gray-700 rounded-lg text-white focus:border-cyber-blue focus:outline-none"
                                     />
                                 </div>
+                            </div>
 
-                                <div className="flex gap-3 pt-4">
+                            <div className="p-6 border-t border-gray-700/50">
+                                <div className="flex gap-3">
                                     <button
                                         type="submit"
                                         className="flex-1 glass px-6 py-2 rounded-lg text-cyber-blue border border-cyber-blue/30 hover:bg-cyber-blue/10 transition-all"
@@ -345,6 +347,7 @@ const CertificationsManagement = () => {
                                         Cancel
                                     </button>
                                 </div>
+                            </div>
                         </form>
                     </div>
                 </div>
