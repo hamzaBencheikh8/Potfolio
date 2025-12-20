@@ -143,7 +143,7 @@ const Projects = () => {
                                 </h3>
 
                                 {/* Project Description */}
-                                <p className="text-gray-300 mb-4 leading-relaxed">
+                                <p className="text-gray-300 mb-4 leading-relaxed break-words overflow-hidden">
                                     {project.description}
                                 </p>
 
