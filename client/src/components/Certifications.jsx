@@ -10,7 +10,12 @@ const Certifications = () => {
     useEffect(() => {
         const fetchCertifications = async () => {
             try {
-                const response = await axios.get('/api/certifications');
+                // Use absolute backend URL on Vercel, localhost in development
+                const apiUrl = window.location.hostname.includes('vercel.app')
+                    ? 'https://portfolio-backend-babn.onrender.com/api/certifications'
+                    : 'http://localhost:5000/api/certifications';
+
+                const response = await axios.get(apiUrl);
                 setCertifications(response.data);
             } catch (err) {
                 console.error('Failed to fetch certifications:', err);
