@@ -84,6 +84,7 @@ const Certifications = () => {
 
                 {/* Certifications Grid */}
                 <motion.div
+                    key={currentPage}
                     variants={containerVariants}
                     initial="hidden"
                     whileInView="visible"
