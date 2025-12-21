@@ -122,13 +122,20 @@ router.post('/', async (req, res) => {
 
         const data = await response.json();
 
+        // Debug: Log the full response structure
+        console.log('Gemini API Response:', JSON.stringify(data, null, 2));
+
         // Extract reply from response
         const reply = data.candidates?.[0]?.content?.parts?.[0]?.text ||
             'Désolé, je n\'ai pas pu générer une réponse.';
 
+        console.log('Extracted reply:', reply);
+
         res.json({ reply });
     } catch (error) {
         console.error('Chat error:', error);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
 
         // Handle rate limit errors
         if (error.message && error.message.includes('429')) {
@@ -138,7 +145,8 @@ router.post('/', async (req, res) => {
         }
 
         res.status(500).json({
-            error: 'Désolé, une erreur s\'est produite. Veuillez réessayer.'
+            error: 'Désolé, une erreur s\'est produite. Veuillez réessayer.',
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
 });
