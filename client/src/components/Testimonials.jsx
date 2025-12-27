@@ -227,7 +227,7 @@ const Testimonials = () => {
                                                                 "{testimonial.message}"
                                                             </p>
                                                             <p className="text-xs text-gray-500 mt-2">
-                                                                {new Date(testimonial.date).toLocaleDateString()}
+                                                                {new Date(testimonial.createdAt).toLocaleDateString()}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -244,8 +244,8 @@ const Testimonials = () => {
                                                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                                                         disabled={currentPage === 1}
                                                         className={`flex-1 glass px-6 py-3 rounded-xl border transition-all duration-300 font-semibold ${currentPage === 1
-                                                                ? 'opacity-50 cursor-not-allowed border-gray-700/30 text-gray-500'
-                                                                : 'border-cyber-green/30 text-cyber-green hover:bg-cyber-green/10'
+                                                            ? 'opacity-50 cursor-not-allowed border-gray-700/30 text-gray-500'
+                                                            : 'border-cyber-green/30 text-cyber-green hover:bg-cyber-green/10'
                                                             }`}
                                                     >
                                                         ← Previous
@@ -263,8 +263,8 @@ const Testimonials = () => {
                                                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                                                         disabled={currentPage === totalPages}
                                                         className={`flex-1 glass px-6 py-3 rounded-xl border transition-all duration-300 font-semibold ${currentPage === totalPages
-                                                                ? 'opacity-50 cursor-not-allowed border-gray-700/30 text-gray-500'
-                                                                : 'border-cyber-green/30 text-cyber-green hover:bg-cyber-green/10'
+                                                            ? 'opacity-50 cursor-not-allowed border-gray-700/30 text-gray-500'
+                                                            : 'border-cyber-green/30 text-cyber-green hover:bg-cyber-green/10'
                                                             }`}
                                                     >
                                                         Next →
